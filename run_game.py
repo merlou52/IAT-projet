@@ -13,8 +13,8 @@ if __name__ == '__main__':
     # controller = KeyboardController()
     # controller = RandomAgent(game.na)
 
-    n_episodes = 2000
-    max_steps = 50
+    n_episodes = 20
+    max_steps = 3000
     alpha = 0.001
     gamma = 1
     eps_profile = EpsilonProfile(1.0, 0.1)
@@ -26,4 +26,3 @@ if __name__ == '__main__':
     while True:
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
-        sleep(0.0001)

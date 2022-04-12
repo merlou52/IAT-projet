@@ -107,6 +107,11 @@ class SpaceInvaders:
         """Execute une action et renvoir l'état suivant, la récompense perçue 
         et un booléen indiquant si la partie est terminée ou non.
         """
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
         is_done = False
         reward = 0
 
@@ -197,8 +202,6 @@ class SpaceInvaders:
 
     def show_score(self):
         score = self.font.render("Points: " + str(self.score_val), True, (255, 255, 255))
-        print(score)
-
         self.screen.blit(score, (5, 5))
 
     def game_over(self):

@@ -28,8 +28,8 @@ class AutoAgent:
         self.game = game
 
         self.Q = np.zeros([800//game.granu_x, 2,
-                           *[1000//game.granu_x]*game.NO_INVADERS,
-                           *[800//game.granu_y]*game.NO_INVADERS,
+                           *[800//game.granu_x]*game.NO_INVADERS,
+                           *[650//game.granu_y]*game.NO_INVADERS,
                            *[2]*game.NO_INVADERS,
                            game.na])  # à compléter en fonction des états choisis
 
@@ -83,6 +83,7 @@ class AutoAgent:
 
         # Execute N episodes
         for episode in range(n_episodes):
+            print(f"Episode #{episode}")
             # Reinitialise l'environnement
             state = env.reset()
             # Execute K steps
@@ -104,6 +105,6 @@ class AutoAgent:
 
     def updateQ(self, state, action, reward, next_state):
         state = tuple(map(int, state))
-        next_state = tuple(map(int, state))
+        next_state = tuple(map(int, next_state))
         # print(self.Q.shape, state, next_state, "\n")
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
