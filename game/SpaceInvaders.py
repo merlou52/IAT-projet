@@ -54,10 +54,10 @@ class SpaceInvaders():
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
         bullet = 1 if self.bullet_state == "fire" else 0
-        enemy_x = [self.invader_X[i]//100 for i in range(self.NO_INVADERS)]
-        enemy_y = [self.invader_Y[i]//250 for i in range(self.NO_INVADERS)]
+        enemy_x = [self.invader_X[i]//25 for i in range(self.NO_INVADERS)]
+        enemy_y = [self.invader_Y[i]//50 for i in range(self.NO_INVADERS)]
         enemy_direction = [self.invader_Xchange[i] > 0 for i in range(self.NO_INVADERS)]
-        player_x = self.player_X//100
+        player_x = self.player_X//25
 
         return [player_x, bullet, *enemy_x, *enemy_y, *enemy_direction]
 
