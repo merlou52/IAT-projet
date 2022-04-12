@@ -7,7 +7,10 @@ from game.SpaceInvaders import SpaceInvaders
 
 def main():
 
-    game = SpaceInvaders(display=True)
+    granu_x = 25
+    granu_y = 50
+
+    game = SpaceInvaders(display=True, granu_x=granu_x, granu_y=granu_y)
     # controller = KeyboardController()
     # controller = RandomAgent(game.na)
 

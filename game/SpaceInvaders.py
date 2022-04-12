@@ -15,10 +15,13 @@ import os
 
 # encodes state as np.array(np.array(pixels))
 
-class SpaceInvaders():
+class SpaceInvaders:
     NO_INVADERS = 2  # Nombre d'aliens
 
-    def __init__(self, display: bool = False):
+    def __init__(self, display: bool = False, granu_x=25, granu_y=25):
+        self.granu_x=25
+        self.granu_y=25
+
         self.display = display
 
         # nombre d'actions (left, right, fire, no_action)
@@ -53,11 +56,12 @@ class SpaceInvaders():
         Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
+
         bullet = 1 if self.bullet_state == "fire" else 0
-        enemy_x = [self.invader_X[i]//25 for i in range(self.NO_INVADERS)]
-        enemy_y = [self.invader_Y[i]//50 for i in range(self.NO_INVADERS)]
-        enemy_direction = [self.invader_Xchange[i] > 0 for i in range(self.NO_INVADERS)]
-        player_x = self.player_X//25
+        enemy_x = [self.invader_X[i]//self.granu_x for i in range(self.NO_INVADERS)]
+        enemy_y = [self.invader_Y[i]//self.granu_y for i in range(self.NO_INVADERS)]
+        enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
+        player_x = self.player_X//self.granu_x
 
         return [player_x, bullet, *enemy_x, *enemy_y, *enemy_direction]
 
@@ -148,6 +152,9 @@ class SpaceInvaders():
             if self.invader_X[i] >= 735 or self.invader_X[i] <= 0:
                 self.invader_Xchange[i] *= -1
                 self.invader_Y[i] += self.invader_Ychange[i]
+
+            self.invader_X[i] = max(self.invader_X[i], 0)
+            self.invader_X[i] = min(self.invader_X[i], 800)
 
             # Collision
             collision = self.is_collision(self.bullet_X, self.invader_X[i], self.bullet_Y, self.invader_Y[i])

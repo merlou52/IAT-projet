@@ -27,7 +27,11 @@ class AutoAgent:
         self.eps_profile = eps_profile
         self.game = game
 
-        self.Q = np.zeros([game.na])  # à compléter en fonction des états choisis
+        self.Q = np.zeros([800//game.granu_x, 2,
+                           *[800//game.granu_x]*game.NO_INVADERS,
+                           *[600//game.granu_y]*game.NO_INVADERS,
+                           *[2]*game.NO_INVADERS,
+                           game.na])  # à compléter en fonction des états choisis
 
         # paramètres de l'algo d'apprentissage
         self.gamma = gamma
@@ -58,7 +62,7 @@ class AutoAgent:
         :return: l'action gloutonne
         """
 
-        mx = np.max(self.Q[state]) # à vérifier
+        mx = np.max(self.Q[state])
         return np.random.choice(np.where(self.Q[state] == mx)[0])
 
     def learn(self, env, n_episodes, max_steps):
@@ -99,4 +103,6 @@ class AutoAgent:
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
 
     def updateQ(self, state, action, reward, next_state):
+        print(state)
+        print(self.Q.shape)
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
