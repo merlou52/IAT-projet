@@ -28,8 +28,8 @@ class AutoAgent:
         self.game = game
 
         self.Q = np.zeros([800//game.granu_x, 2,
-                           *[800//game.granu_x]*game.NO_INVADERS,
-                           *[600//game.granu_y]*game.NO_INVADERS,
+                           *[1000//game.granu_x]*game.NO_INVADERS,
+                           *[800//game.granu_y]*game.NO_INVADERS,
                            *[2]*game.NO_INVADERS,
                            game.na])  # à compléter en fonction des états choisis
 
@@ -61,7 +61,7 @@ class AutoAgent:
         :param state: l'état courant
         :return: l'action gloutonne
         """
-
+        state = tuple(map(int, state))
         mx = np.max(self.Q[state])
         return np.random.choice(np.where(self.Q[state] == mx)[0])
 
@@ -103,6 +103,7 @@ class AutoAgent:
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
 
     def updateQ(self, state, action, reward, next_state):
-        print(state)
-        print(self.Q.shape)
+        state = tuple(map(int, state))
+        next_state = tuple(map(int, state))
+        # print(self.Q.shape, state, next_state, "\n")
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))

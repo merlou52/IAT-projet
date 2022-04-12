@@ -5,8 +5,7 @@ from controller.epsilon_profile import EpsilonProfile
 from game.SpaceInvaders import SpaceInvaders
 
 
-def main():
-
+if __name__ == '__main__':
     granu_x = 25
     granu_y = 50
 
@@ -28,7 +27,3 @@ def main():
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
         sleep(0.0001)
-
-
-if __name__ == '__main__' :
-    main()
