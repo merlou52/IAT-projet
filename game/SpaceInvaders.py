@@ -58,12 +58,12 @@ class SpaceInvaders:
         """
 
         bullet = 1 if self.bullet_state == "fire" else 0
-        enemy_x = [self.invader_X[i]//self.granu_x for i in range(self.NO_INVADERS)]
-        enemy_y = [self.invader_Y[i]//self.granu_y for i in range(self.NO_INVADERS)]
+        enemy_x = [int(self.invader_X[i]//self.granu_x) for i in range(self.NO_INVADERS)]
+        enemy_y = [int(self.invader_Y[i]//self.granu_y) for i in range(self.NO_INVADERS)]
         enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
-        player_x = self.player_X//self.granu_x
+        player_x = int(self.player_X//self.granu_x)
 
-        return [player_x, bullet, *enemy_x, *enemy_y, *enemy_direction]
+        return player_x, bullet, *enemy_x, *enemy_y, *enemy_direction
 
     def reset(self):
         """Reset the game at the initial state.
