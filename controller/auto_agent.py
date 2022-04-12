@@ -1,7 +1,7 @@
 import numpy as np
 
 from game.SpaceInvaders import SpaceInvaders
-from epsilon_profile import EpsilonProfile
+from controller.epsilon_profile import EpsilonProfile
 
 
 class AutoAgent:
@@ -24,6 +24,7 @@ class AutoAgent:
         """
 
         self.num_actions = game.na
+        self.eps_profile = eps_profile
         self.game = game
 
         self.Q = np.zeros([game.na])  # à compléter en fonction des états choisis

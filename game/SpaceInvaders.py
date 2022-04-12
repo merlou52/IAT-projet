@@ -1,14 +1,11 @@
+from dataclasses import dataclass
+from typing import List, Tuple
+
 import pygame
 import random
-import math
-from pygame import mixer
+from math import pow, sqrt
 import numpy as np
 import os
-
-
-def getURL(filename):
-    return os.path.dirname(__file__) + "/" + filename
-
 
 # encodes action as integer :
 # 0 : gauche
@@ -19,7 +16,7 @@ def getURL(filename):
 # encodes state as np.array(np.array(pixels))
 
 class SpaceInvaders():
-    NO_INVADERS = 8  # Nombre d'aliens
+    NO_INVADERS = 2  # Nombre d'aliens
 
     def __init__(self, display: bool = False):
         self.display = display
@@ -38,28 +35,31 @@ class SpaceInvaders():
             self.screen = pygame.display.set_mode(DISPLAY_SIZE, flags=pygame.HIDDEN)
 
         # caption and icon
-        pygame.display.set_caption("Welcome to Space Invaders Game by:- styles")
+        pygame.display.set_caption("(´｡• ω •｡`) Space invaders")
 
         # Score
-        self.scoreX = 5
-        self.scoreY = 5
         self.font = pygame.font.Font('freesansbold.ttf', 20)
+        self.player_Xchange = 0
 
         # Game Over
         self.game_over_font = pygame.font.Font('freesansbold.ttf', 64)
 
+        # player
         self.playerImage = pygame.image.load(os.path.abspath('game/data/spaceship.png'))
         self.reset()
-
-    def full_image(self):
-        return pygame.surfarray.array3d(self.screen)
 
     def get_state(self):
         """ A COMPLETER AVEC VOTRE ETAT
         Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
-        return "L'état n'est pas implémenté (SpaceInvaders.get_state)"
+        bullet = 1 if self.bullet_state == "fire" else 0
+        enemy_x = [self.invader_X[i]//100 for i in range(self.NO_INVADERS)]
+        enemy_y = [self.invader_Y[i]//250 for i in range(self.NO_INVADERS)]
+        enemy_direction = [self.invader_Xchange[i] > 0 for i in range(self.NO_INVADERS)]
+        player_x = self.player_X//100
+
+        return [player_x, bullet, *enemy_x, *enemy_y, *enemy_direction]
 
     def reset(self):
         """Reset the game at the initial state.
@@ -68,7 +68,6 @@ class SpaceInvaders():
 
         self.player_X = 370
         self.player_Y = 523
-        self.player_Xchange = 0
 
         # Invader
         self.invaderImage = []
@@ -76,6 +75,7 @@ class SpaceInvaders():
         self.invader_Y = []
         self.invader_Xchange = []
         self.invader_Ychange = []
+
         for _ in range(SpaceInvaders.NO_INVADERS):
             self.invaderImage.append(pygame.image.load(os.path.abspath('game/data/alien.png')))
             self.invader_X.append(random.randint(64, 737))
@@ -87,8 +87,7 @@ class SpaceInvaders():
         # rest - bullet is not moving
         # fire - bullet is moving
         self.bulletImage = pygame.image.load(os.path.abspath('game/data/bullet.png'))
-        self.bulletImage = pygame.image.load(os.path.abspath('game/data/bullet.png'))
-        self.bulletImage = pygame.image.load(os.path.abspath('game/data/bullet.png'))
+
         self.bullet_X = 0
         self.bullet_Y = 500
         self.bullet_Xchange = 0
@@ -109,6 +108,7 @@ class SpaceInvaders():
 
         # RGB
         self.screen.fill((0, 0, 0))
+
         # Controling the player movement from the arrow keys
         if action == 0:  # GO LEFT
             self.player_Xchange = -1.7
@@ -148,6 +148,7 @@ class SpaceInvaders():
             if self.invader_X[i] >= 735 or self.invader_X[i] <= 0:
                 self.invader_Xchange[i] *= -1
                 self.invader_Y[i] += self.invader_Ychange[i]
+
             # Collision
             collision = self.is_collision(self.bullet_X, self.invader_X[i], self.bullet_Y, self.invader_Y[i])
             if collision:
@@ -161,6 +162,7 @@ class SpaceInvaders():
 
             self.move_invader(self.invader_X[i], self.invader_Y[i], i)
 
+
         # restricting the spaceship so that it doesn't go out of screen
         self.player_X = max(self.player_X, 16)
         self.player_X = min(self.player_X, 750)
@@ -173,7 +175,6 @@ class SpaceInvaders():
         return self.get_state(), reward, is_done
 
     def render(self):
-        self.show_score(self.scoreX, self.scoreY)
         pygame.display.update()
 
     def move_player(self, x, y):
@@ -186,14 +187,14 @@ class SpaceInvaders():
         self.screen.blit(self.bulletImage, (x, y))
         self.bullet_state = "fire"
 
-    def show_score(self, x, y):
+    def show_score(self):
         score = self.font.render("Points: " + str(self.score_val), True, (255, 255, 255))
-        self.screen.blit(score, (x, y))
+        self.screen.blit(score, (5, 5))
 
     def game_over(self):
         game_over_text = self.game_over_font.render("GAME OVER", True, (255, 255, 255))
         self.screen.blit(game_over_text, (190, 250))
 
     def is_collision(self, x1, x2, y1, y2):
-        distance = (math.pow(x1 - x2, 2)) + (math.pow(y1 - y2, 2))
+        distance = pow(x1 - x2, 2) + pow(y1 - y2, 2)
         return distance <= 2500
