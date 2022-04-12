@@ -4,7 +4,7 @@ from game.SpaceInvaders import SpaceInvaders
 from epsilon_profile import EpsilonProfile
 
 
-class AutoAgent():
+class AutoAgent:
     """
     Agent automatique utilisant la méthode du qlearning
     """
@@ -35,8 +35,30 @@ class AutoAgent():
         self.eps_profile = eps_profile
         self.epsilon = self.eps_profile.initial
 
-    def select_action(self, _):
-        return np.random.randint(self.num_actions)
+    def select_action(self, state): # specifier type ?
+        """
+        Retourne l'action à effectuer en fonction du processus d'exploration (epsilon-greedy)
+
+        :param state: l'état courant
+        :return: l'action
+        """
+
+        if np.random.rand() < self.epsilon:
+            a = np.random.randint(self.num_actions)
+        else:
+            a = self.select_greedy_action(state)
+        return a
+
+    def select_greedy_action(self, state): # specifier type ?
+        """
+        Retourne l'action gloutonne
+
+        :param state: l'état courant
+        :return: l'action gloutonne
+        """
+
+        mx = np.max(self.Q[state]) # à vérifier
+        return np.random.choice(np.where(self.Q[state] == mx)[0])
 
     def learn(self, env, n_episodes, max_steps):
         """Cette méthode exécute l'algorithme de q-learning.
@@ -76,4 +98,4 @@ class AutoAgent():
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
 
     def updateQ(self, state, action, reward, next_state):
-        return "not implemented"
+        self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
