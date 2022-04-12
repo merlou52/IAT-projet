@@ -18,6 +18,7 @@ def main():
     eps_profile = EpsilonProfile(1.0, 0.1)
 
     controller = AutoAgent(game, eps_profile, gamma, alpha)
+    controller.learn(game, n_episodes, max_steps)
     state = game.reset()
 
     while True:

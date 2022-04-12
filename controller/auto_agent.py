@@ -80,7 +80,7 @@ class AutoAgent:
         # Execute N episodes
         for episode in range(n_episodes):
             # Reinitialise l'environnement
-            state = env.reset_using_existing_maze()
+            state = env.reset()
             # Execute K steps
             for step in range(max_steps):
                 # Selectionne une action
