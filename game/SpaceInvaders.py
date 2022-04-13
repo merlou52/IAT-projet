@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from time import sleep
 from typing import List, Tuple
 
 import pygame
@@ -18,9 +19,9 @@ import os
 class SpaceInvaders:
     NO_INVADERS = 1  # Nombre d'aliens
 
-    def __init__(self, display: bool = False, granu_x=25, granu_y=25):
-        self.granu_x=25
-        self.granu_y=25
+    def __init__(self, granu_x, granu_y, display: bool = False, ):
+        self.granu_x = granu_x
+        self.granu_y = granu_y
 
         self.display = display
 
@@ -51,18 +52,31 @@ class SpaceInvaders:
         self.playerImage = pygame.image.load(os.path.abspath('game/data/spaceship.png'))
         self.reset()
 
+    def index_x(self, posx):
+        for pos in range(len(self.granu_x)-1):
+            if posx < self.granu_x[pos+1]:
+                return pos
+        return len(self.granu_x)-1
+
+    def index_y(self, posy):
+        for pos in range(len(self.granu_y)-1):
+            if posy < self.granu_y[pos+1]:
+                return pos
+        return len(self.granu_y)-1
+
     def get_state(self):
         """ A COMPLETER AVEC VOTRE ETAT
         Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
 
-        player_x = int(self.player_X//self.granu_x)
+        player_x = self.index_x(self.player_X)
         bullet = 1 if self.bullet_state == "fire" else 0
-        enemy_x = [int(self.invader_X[i]//self.granu_x) for i in range(self.NO_INVADERS)]
-        enemy_y = [int(self.invader_Y[i]//self.granu_y) for i in range(self.NO_INVADERS)]
+        enemy_x = [self.index_x(invx) for invx in self.invader_X]
+        enemy_y = [self.index_y(invy) for invy in self.invader_Y]
         enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
 
+        # sleep(0.02)
         return player_x, bullet, *enemy_x, *enemy_y, *enemy_direction
 
     def reset(self):
@@ -173,6 +187,9 @@ class SpaceInvaders:
                 self.invader_Xchange[i] *= -1
 
             self.move_invader(self.invader_X[i], self.invader_Y[i], i)
+
+        sleep(0.01)
+        print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
 
 
         # restricting the spaceship so that it doesn't go out of screen

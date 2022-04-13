@@ -63,10 +63,14 @@ class AutoAgent:
         :param state: l'état courant
         :return: l'action gloutonne
         """
-        mx = np.max(self.Q[state])
-        if mx != 0:
-            print(mx, np.where(self.Q[state] == mx))
-        return np.random.choice(np.where(self.Q[state] == mx)[0])
+        try:
+            mx = np.max(self.Q[state])
+            # if mx != 0:
+            #     print(mx, np.where(self.Q[state] == mx))
+            return np.random.choice(np.where(self.Q[state] == mx)[0])
+        except IndexError:
+            print("INDEX ERROR")
+            print(state, self.Q.shape)
 
     def learn(self, env, n_episodes, max_steps):
         """Cette méthode exécute l'algorithme de q-learning.
@@ -113,8 +117,9 @@ class AutoAgent:
     def updateQ(self, state, action, reward, next_state):
         try:
             new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
-            if new_value:
-                print(state, action, reward, new_value)
+            # if new_value:
+            #     print(state, action, reward, new_value)
             self.Q[state][action] = new_value
         except IndexError:
+            print("INDEX ERROR")
             print(state, action, self.Q.shape)
