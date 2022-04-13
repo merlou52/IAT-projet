@@ -77,7 +77,7 @@ class SpaceInvaders:
         enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
 
         # sleep(0.02)
-        return player_x, bullet, *enemy_x, *enemy_y, *enemy_direction
+        return (player_x, bullet, *enemy_x, *enemy_y, *enemy_direction)
 
     def reset(self):
         """Reset the game at the initial state.
@@ -188,8 +188,9 @@ class SpaceInvaders:
 
             self.move_invader(self.invader_X[i], self.invader_Y[i], i)
 
-        # sleep(0.01)
-        # print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
+        #sleep(0.01)
+        #print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
+
 
         # restricting the spaceship so that it doesn't go out of screen
         self.player_X = max(self.player_X, 16)
