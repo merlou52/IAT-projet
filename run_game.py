@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # controller = KeyboardController()
     # controller = RandomAgent(game.na)
 
-    n_episodes = 2000
+    n_episodes = 200
     max_steps = 300
     alpha = 0.01
     gamma = 0.9
@@ -29,6 +29,9 @@ if __name__ == '__main__':
     game.display = True
     DISPLAY_SIZE = (800, 600)
     game.screen = pygame.display.set_mode(DISPLAY_SIZE)
-    while True:
+
+    is_done = False
+
+    while not is_done:
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
