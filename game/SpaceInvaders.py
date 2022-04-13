@@ -188,9 +188,8 @@ class SpaceInvaders:
 
             self.move_invader(self.invader_X[i], self.invader_Y[i], i)
 
-        sleep(0.01)
-        print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
-
+        # sleep(0.01)
+        # print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
 
         # restricting the spaceship so that it doesn't go out of screen
         self.player_X = max(self.player_X, 16)
