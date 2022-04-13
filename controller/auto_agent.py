@@ -40,6 +40,8 @@ class AutoAgent:
         self.eps_profile = eps_profile
         self.epsilon = self.eps_profile.initial
 
+        self.ep_score = 0
+
     def select_action(self, state): # specifier type ?
         """
         Retourne l'action à effectuer en fonction du processus d'exploration (epsilon-greedy)
@@ -82,7 +84,6 @@ class AutoAgent:
 
         # Execute N episodes
         for episode in range(n_episodes):
-            print(f"Episode #{episode}")
             # Reinitialise l'environnement
             state = env.reset()
             # Execute K steps
@@ -91,6 +92,8 @@ class AutoAgent:
                 action = self.select_action(state)
                 # Echantillonne l'état suivant et la récompense
                 next_state, reward, terminal = env.step(action)
+                if reward:
+                    self.ep_score+=reward
                 # Mets à jour la fonction de valeur Q
                 self.updateQ(state, action, reward, next_state)
 
@@ -101,6 +104,7 @@ class AutoAgent:
                 state = next_state
             # Mets à jour la valeur du epsilon
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
+            print(f"End episode {episode} : score {self.ep_score}, epsilon {self.epsilon}")
 
     def updateQ(self, state, action, reward, next_state):
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))

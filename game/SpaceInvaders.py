@@ -16,7 +16,7 @@ import os
 # encodes state as np.array(np.array(pixels))
 
 class SpaceInvaders:
-    NO_INVADERS = 2  # Nombre d'aliens
+    NO_INVADERS = 1  # Nombre d'aliens
 
     def __init__(self, display: bool = False, granu_x=25, granu_y=25):
         self.granu_x=25

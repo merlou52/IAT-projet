@@ -13,8 +13,8 @@ if __name__ == '__main__':
     # controller = KeyboardController()
     # controller = RandomAgent(game.na)
 
-    n_episodes = 20
-    max_steps = 3000
+    n_episodes = 15
+    max_steps = 5000
     alpha = 0.001
     gamma = 1
     eps_profile = EpsilonProfile(1.0, 0.1)
