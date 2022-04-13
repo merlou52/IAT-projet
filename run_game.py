@@ -33,3 +33,5 @@ if __name__ == '__main__':
     while not is_done:
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
+
+    print("SCORE TOTAL : " + str(game.score_val))
