@@ -1,6 +1,8 @@
 import random
 import os
 import pygame
+
+
 # encodes action as integer :
 # 0 : gauche
 # 1 : droite

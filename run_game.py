@@ -1,3 +1,4 @@
+import sys
 from time import sleep
 
 import pygame
@@ -14,10 +15,14 @@ if __name__ == '__main__':
 
     game = SpaceInvaders(display=False, granu_x=granu_x, granu_y=granu_y)
 
-    N_EPISODES = 1000
-    MAX_STEPS = 200
-    ALPHA = 0.01
-    GAMMA = 0.9
+    if len(sys.argv) != 5:
+        print("python run_game.py <episodes> <steps> <alpha> <gamma>")
+        sys.exit(1)
+
+    N_EPISODES = int(sys.argv[1])
+    MAX_STEPS = int(sys.argv[2])
+    ALPHA = float(sys.argv[3])
+    GAMMA = float(sys.argv[4])
     eps_profile = EpsilonProfile(1.0, 0.01)
 
     controller = AutoAgent(game, eps_profile, GAMMA, ALPHA)
