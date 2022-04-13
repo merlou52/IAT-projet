@@ -13,17 +13,15 @@ if __name__ == '__main__':
     granu_y = [-20, 150, 250]
 
     game = SpaceInvaders(display=False, granu_x=granu_x, granu_y=granu_y)
-    # controller = KeyboardController()
-    # controller = RandomAgent(game.na)
 
-    n_episodes = 200
-    max_steps = 300
-    alpha = 0.01
-    gamma = 0.9
-    eps_profile = EpsilonProfile(1.0, 0.1)
+    N_EPISODES = 1000
+    MAX_STEPS = 200
+    ALPHA = 0.01
+    GAMMA = 0.9
+    eps_profile = EpsilonProfile(1.0, 0.01)
 
-    controller = AutoAgent(game, eps_profile, gamma, alpha)
-    controller.learn(game, n_episodes, max_steps)
+    controller = AutoAgent(game, eps_profile, GAMMA, ALPHA)
+    controller.learn(game, N_EPISODES, MAX_STEPS)
     state = game.reset()
 
     game.display = True

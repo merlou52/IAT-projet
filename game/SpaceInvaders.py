@@ -1,13 +1,6 @@
-from dataclasses import dataclass
-from time import sleep
-from typing import List, Tuple
-
-import pygame
 import random
-from math import pow, sqrt
-import numpy as np
 import os
-
+import pygame
 # encodes action as integer :
 # 0 : gauche
 # 1 : droite
@@ -65,19 +58,13 @@ class SpaceInvaders:
         return len(self.granu_y)-1
 
     def get_state(self):
-        """ A COMPLETER AVEC VOTRE ETAT
-        Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
-        le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
-        """
-
         player_x = self.index_x(self.player_X)
         bullet = 1 if self.bullet_state == "fire" else 0
         enemy_x = [self.index_x(invx) for invx in self.invader_X]
         enemy_y = [self.index_y(invy) for invy in self.invader_Y]
         enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
 
-        # sleep(0.02)
-        return (player_x, bullet, *enemy_x, *enemy_y, *enemy_direction)
+        return player_x, bullet, *enemy_x, *enemy_y, *enemy_direction
 
     def reset(self):
         """Reset the game at the initial state.
@@ -188,9 +175,8 @@ class SpaceInvaders:
 
             self.move_invader(self.invader_X[i], self.invader_Y[i], i)
 
-        #sleep(0.01)
-        #print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
-
+        # sleep(0.01)
+        # print(int(self.invader_X[0]), int(self.invader_Y[0]), int(self.player_X), int(self.player_Y))
 
         # restricting the spaceship so that it doesn't go out of screen
         self.player_X = max(self.player_X, 16)
