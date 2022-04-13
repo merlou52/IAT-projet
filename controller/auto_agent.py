@@ -56,7 +56,7 @@ class AutoAgent:
             a = self.select_greedy_action(state)
         return a
 
-    def select_greedy_action(self, state): # specifier type ?
+    def select_greedy_action(self, state):
         """
         Retourne l'action gloutonne
 
@@ -64,6 +64,8 @@ class AutoAgent:
         :return: l'action gloutonne
         """
         mx = np.max(self.Q[state])
+        if mx != 0:
+            print(mx, np.where(self.Q[state] == mx))
         return np.random.choice(np.where(self.Q[state] == mx)[0])
 
     def learn(self, env, n_episodes, max_steps):
@@ -84,6 +86,7 @@ class AutoAgent:
 
         # Execute N episodes
         for episode in range(n_episodes):
+            self.ep_score = 0
             # Reinitialise l'environnement
             state = env.reset()
             # Execute K steps
@@ -92,14 +95,15 @@ class AutoAgent:
                 action = self.select_action(state)
                 # Echantillonne l'état suivant et la récompense
                 next_state, reward, terminal = env.step(action)
-                if reward:
-                    self.ep_score+=reward
-                # Mets à jour la fonction de valeur Q
-                self.updateQ(state, action, reward, next_state)
 
                 if terminal:
                     n_steps[episode] = step + 1
                     break
+
+                if reward:
+                    self.ep_score+=reward
+                # Mets à jour la fonction de valeur Q
+                self.updateQ(state, action, reward, next_state)
 
                 state = next_state
             # Mets à jour la valeur du epsilon
@@ -107,4 +111,10 @@ class AutoAgent:
             print(f"End episode {episode} : score {self.ep_score}, epsilon {self.epsilon}")
 
     def updateQ(self, state, action, reward, next_state):
-        self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
+        try:
+            new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
+            if new_value:
+                print(state, action, reward, new_value)
+            self.Q[state][action] = new_value
+        except IndexError:
+            print(state, action, self.Q.shape)

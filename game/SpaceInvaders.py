@@ -57,11 +57,11 @@ class SpaceInvaders:
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
 
+        player_x = int(self.player_X//self.granu_x)
         bullet = 1 if self.bullet_state == "fire" else 0
         enemy_x = [int(self.invader_X[i]//self.granu_x) for i in range(self.NO_INVADERS)]
         enemy_y = [int(self.invader_Y[i]//self.granu_y) for i in range(self.NO_INVADERS)]
         enemy_direction = [1 if self.invader_Xchange[i] > 0 else 0 for i in range(self.NO_INVADERS)]
-        player_x = int(self.player_X//self.granu_x)
 
         return player_x, bullet, *enemy_x, *enemy_y, *enemy_direction
 

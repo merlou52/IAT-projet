@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # controller = KeyboardController()
     # controller = RandomAgent(game.na)
 
-    n_episodes = 15
+    n_episodes = 10
     max_steps = 5000
     alpha = 0.001
     gamma = 1
