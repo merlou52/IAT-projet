@@ -7,6 +7,7 @@ class AutoAgent:
     """
     Agent automatique utilisant la méthode du qlearning
     """
+
     def __init__(self, game: SpaceInvaders, eps_profile: EpsilonProfile, gamma, alpha):
         """
         :param game: le jeu à résoudre
@@ -27,9 +28,9 @@ class AutoAgent:
         self.game = game
 
         self.Q = np.zeros([len(game.granu_x), 2,
-                           *[len(game.granu_x)]*game.NO_INVADERS,
-                           *[len(game.granu_y)]*game.NO_INVADERS,
-                           *[2]*game.NO_INVADERS,
+                           *[len(game.granu_x)] * game.NO_INVADERS,
+                           *[len(game.granu_y)] * game.NO_INVADERS,
+                           *[2] * game.NO_INVADERS,
                            game.na])  # à compléter en fonction des états choisis
 
         # paramètres de l'algo d'apprentissage
@@ -41,7 +42,7 @@ class AutoAgent:
 
         self.ep_score = 0
 
-    def select_action(self, state): # specifier type ?
+    def select_action(self, state):  # specifier type ?
         """
         Retourne l'action à effectuer en fonction du processus d'exploration (epsilon-greedy)
 
@@ -104,18 +105,19 @@ class AutoAgent:
                     break
 
                 if reward:
-                    self.ep_score+=reward
+                    self.ep_score += reward
                 # Mets à jour la fonction de valeur Q
                 self.updateQ(state, action, reward, next_state)
 
                 state = next_state
             # Mets à jour la valeur du epsilon
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
-            print(f"End episode {episode} : score {self.ep_score}, epsilon {self.epsilon}")
+            # print(f"End episode {episode} : score {self.ep_score}, epsilon {self.epsilon}")
 
     def updateQ(self, state, action, reward, next_state):
         try:
-            new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
+            new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (
+                        reward + self.gamma * np.max(self.Q[next_state]))
             # if new_value:
             #     print(state, action, reward, new_value)
             self.Q[state][action] = new_value

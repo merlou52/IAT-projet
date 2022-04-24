@@ -1,5 +1,9 @@
 import random
 import os
+from os import environ
+
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
 import pygame
 
 
@@ -48,16 +52,16 @@ class SpaceInvaders:
         self.reset()
 
     def index_x(self, posx):
-        for pos in range(len(self.granu_x)-1):
-            if posx < self.granu_x[pos+1]:
+        for pos in range(len(self.granu_x) - 1):
+            if posx < self.granu_x[pos + 1]:
                 return pos
-        return len(self.granu_x)-1
+        return len(self.granu_x) - 1
 
     def index_y(self, posy):
-        for pos in range(len(self.granu_y)-1):
-            if posy < self.granu_y[pos+1]:
+        for pos in range(len(self.granu_y) - 1):
+            if posy < self.granu_y[pos + 1]:
                 return pos
-        return len(self.granu_y)-1
+        return len(self.granu_y) - 1
 
     def get_state(self):
         player_x = self.index_x(self.player_X)

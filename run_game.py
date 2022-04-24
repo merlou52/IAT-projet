@@ -1,5 +1,8 @@
 import sys
 from time import sleep
+from os import environ
+
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame
 
@@ -7,7 +10,6 @@ from controller.auto_agent import AutoAgent
 from controller.epsilon_profile import EpsilonProfile
 from controller.keyboard import KeyboardController
 from game.SpaceInvaders import SpaceInvaders
-
 
 if __name__ == '__main__':
     granu_x = [-20, 200, 325, 425, 550]
@@ -39,7 +41,7 @@ if __name__ == '__main__':
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
 
-    print("SCORE TOTAL 1: " + str(game.score_val))
+    print(str(game.score_val))
 
     is_done = False
     game.reset()
@@ -47,4 +49,4 @@ if __name__ == '__main__':
         action = controller.select_action(state)
         state, reward, is_done = game.step(action)
 
-    print("SCORE TOTAL 2 : " + str(game.score_val))
+    print(str(game.score_val))
