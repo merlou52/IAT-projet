@@ -27,11 +27,10 @@ class AutoAgent:
         self.eps_profile = eps_profile
         self.game = game
 
-        self.Q = np.zeros([len(game.granu_x), 2,
-                           *[len(game.granu_x)] * game.NO_INVADERS,
-                           *[len(game.granu_y)] * game.NO_INVADERS,
-                           *[2] * game.NO_INVADERS,
-                           game.na])  # à compléter en fonction des états choisis
+        self.Q = np.zeros([2, *[len(game.granu_x)] * game.NO_INVADERS,
+                          *[len(game.granu_y)] * game.NO_INVADERS,
+                          *[2] * game.NO_INVADERS,
+                          game.na])  # à compléter en fonction des états choisis
 
         # paramètres de l'algo d'apprentissage
         self.gamma = gamma
@@ -117,7 +116,7 @@ class AutoAgent:
     def updateQ(self, state, action, reward, next_state):
         try:
             new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (
-                        reward + self.gamma * np.max(self.Q[next_state]))
+                    reward + self.gamma * np.max(self.Q[next_state]))
             # if new_value:
             #     print(state, action, reward, new_value)
             self.Q[state][action] = new_value
