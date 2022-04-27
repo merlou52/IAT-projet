@@ -12,14 +12,8 @@ from controller.keyboard import KeyboardController
 from game.SpaceInvaders import SpaceInvaders
 
 if __name__ == '__main__':
-    # granu_x = [-20, 200, 325, 425, 550]
-    granu_x = list(range(-20, 800, 20))
-    granu_y = [-20, 150, 250]
-
-    game = SpaceInvaders(display=False, granu_x=granu_x, granu_y=granu_y)
-
-    if len(sys.argv) != 5:
-        print("python run_game.py <episodes> <steps> <alpha> <gamma>")
+    if len(sys.argv) != 6:
+        print("python run_game.py <episodes> <steps> <alpha> <gamma> <granu_x")
         sys.exit(1)
 
     N_EPISODES = int(sys.argv[1])
@@ -27,6 +21,11 @@ if __name__ == '__main__':
     ALPHA = float(sys.argv[3])
     GAMMA = float(sys.argv[4])
     eps_profile = EpsilonProfile(1.0, 0.01)
+
+    granu_x = list(range(-20, 800, int(sys.argv[5])))
+    granu_y = [-20, 150, 250]
+
+    game = SpaceInvaders(display=False, granu_x=granu_x, granu_y=granu_y)
 
     controller = AutoAgent(game, eps_profile, GAMMA, ALPHA)
     controller.learn(game, N_EPISODES, MAX_STEPS)
