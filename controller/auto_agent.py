@@ -1,7 +1,7 @@
 import numpy as np
 from game.SpaceInvaders import SpaceInvaders
 from controller.epsilon_profile import EpsilonProfile
-
+import pandas as pd
 
 class AutoAgent:
     """
@@ -41,6 +41,10 @@ class AutoAgent:
 
         self.ep_score = 0
 
+        # Visualisation des données
+        self.qvalues = pd.DataFrame(data={'episode': [], 'value': []})
+        self.values = pd.DataFrame(data={'nx': [*[len(game.granu_x)] * game.NO_INVADERS], 'ny': [*[len(game.granu_y)] * game.NO_INVADERS], 'no_invaders':[*[2] * game.NO_INVADERS]})
+	
     def select_action(self, state):  # specifier type ?
         """
         Retourne l'action à effectuer en fonction du processus d'exploration (epsilon-greedy)
@@ -113,13 +117,43 @@ class AutoAgent:
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
             # print(f"End episode {episode} : score {self.ep_score}, epsilon {self.epsilon}")
 
+            if n_episodes >= 0:
+                state = env.reset()
+                print("\r#> Ep. {}/{} Value {}".format(episode, n_episodes,
+                                                       self.Q[state][self.select_greedy_action(state)]), end=" ")
+                self.save_log(env, episode)
+
+            # self.values.to_csv('logV.csv')
+            self.qvalues.to_csv('logQ.csv')
+
     def updateQ(self, state, action, reward, next_state):
         try:
             new_value = (1. - self.alpha) * self.Q[state][action] + self.alpha * (
                     reward + self.gamma * np.max(self.Q[next_state]))
             # if new_value:
-            #     print(state, action, reward, new_value)
+            
+            #     print(state, action, reward, new_
+            
             self.Q[state][action] = new_value
         except IndexError:
             print("INDEX ERROR")
             print(state, action, self.Q.shape)
+
+    def save_log(self, env, episode):
+        """Sauvegarde les données d'apprentissage.
+        :warning: Vous n'avez pas besoin de comprendre cette méthode
+        """
+        state = env.reset()
+        # Construit la fonction de valeur d'état associée à Q
+        # V = np.zeros([2, *[len(self.game.granu_x)] * self.game.NO_INVADERS,
+        #                   *[len(self.game.granu_y)] * self.game.NO_INVADERS,
+        #                   *[2] * self.game.NO_INVADERS])
+        # for state in self.game.get_state():
+        #     val = self.Q[state][self.select_action(state)]
+        #     # V[state] = val
+
+        self.qvalues = self.qvalues.append(
+            {'episode': episode, 'value': self.Q[state][self.select_greedy_action(state)]}, ignore_index=True)
+        # self.values = self.values.append(
+        #     {'episode': episode, 'value': np.reshape(V, (1, *[len(self.game.granu_x)] * self.game.NO_INVADERS *
+        #                   [len(self.game.granu_y)] * self.game.NO_INVADERS * [2] * self.game.NO_INVADERS))[0]}, ignore_index=True)
